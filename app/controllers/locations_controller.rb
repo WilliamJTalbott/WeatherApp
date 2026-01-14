@@ -1,54 +1,55 @@
 class LocationsController < ApplicationController
-  require 'ipaddr'
-  require 'httparty'
-  require 'json'
+  require "ipaddr"
+  require "httparty"
+  require "json"
 
-  def is_ip_address?(string)
-      IPAddr.new(string)
-      true
-    rescue IPAddr::InvalidAddressError
-      false
+  def update_location_data(location)
+      if is_address_ip?(location)
+        set_ip_data(location)
+      else
+        set_postal_data(location)
+      end
+      location.save
   end
 
-  def call_postal_api(postal_adr)
-    url = 'https://geocode.xyz'
+
+  def is_address_ip?(location)
+    IPAddr.new(location.address)
+    true
+  rescue IPAddr::InvalidAddressError
+    false
+  end
+
+  def set_postal_data(location)
+    url = "https://geocode.xyz"
 
     params = {
-        'auth' => '407111560940047568871x75588',
-        'locate' => postal_adr,
-        'json' => 1
+        "auth" => "407111560940047568871x75588",
+        "locate" => location.address,
+        "json" => 1
     }
 
     response = HTTParty.get(url, query: params)
-    output = response.body
-    return output
+    output = JSON.parse(response.body)
+
+    location.city = output["city"].to_s
+    location.latitude = output["latt"].to_f
+    location.longitude = output["longt"].to_f
   end
 
-  def call_ip_api(ip_adr)
-    response = HTTParty.get("https://ipapi.co/#{ip_adr}/json/")
+  def set_ip_data(location)
+    response = HTTParty.get("https://ipapi.co/#{location.address}/json/")
     output = JSON.parse(response.body)
-    return output
+
+    location.city = output["city"].to_s
+    location.latitude = output["latitude"].to_f
+    location.longitude = output["longitude"].to_f
   end
 
   def index
-
-    @addresses_data = []
-
-    locations = Location.all
-
-    locations.each_with_index do |location, index|
-
-      data = "not an ip"
-
-      if is_ip_address?(location.address)
-        data = call_ip_api(location.address)
-      else
-        data = call_postal_api(location.address)
-      end
-
-      @addresses_data[index] = data
-
+    Location.all.each do |location|
+      update_location_data(location)
     end
-    
+    @addresses_data = Location.all
   end
 end
