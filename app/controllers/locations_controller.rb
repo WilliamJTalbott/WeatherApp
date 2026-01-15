@@ -12,6 +12,12 @@ class LocationsController < ApplicationController
       location.save
   end
 
+  def get_weather_data(location)
+    url = "https://api.open-meteo.com/v1/forecast?latitude=#{location.latitude}&longitude=#{location.longitude}&daily=temperature_2m_max,temperature_2m_min&timezone=auto&wind_speed_unit=mph&temperature_unit=fahrenheit&precipitation_unit=inch"
+    response = HTTParty.get(url)
+    JSON.parse(response.body)
+  end
+
 
   def is_address_ip?(location)
     IPAddr.new(location.address)
@@ -47,9 +53,14 @@ class LocationsController < ApplicationController
   end
 
   def index
+    @weather_array = {}
+
     Location.all.each do |location|
       update_location_data(location)
+      weather_json = get_weather_data(location)
+      @weather_array[location.id] = weather_json
     end
+
     @addresses_data = Location.all
   end
 end
