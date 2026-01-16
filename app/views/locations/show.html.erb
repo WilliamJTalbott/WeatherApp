@@ -1,0 +1,46 @@
+
+<body>
+
+    <div>
+        <h1>
+            <%= image_tag "sun.png", class: "icon" %>
+            Weather App
+        </h1>
+    </div>
+
+    <div class="page">
+
+        <div class="sidebar">
+            <p>Addresses</p>
+            <input type="text" placeholder="Enter IP/Street Address">
+            <button>Add Location</button>
+
+            <div class="locations_container">
+                <%= render partial: "sidebar_item",
+                collection: @locations.reject { |location| location.city.blank? },
+                as: :location,
+                locals: { current_location: @location } %>
+            </div>
+
+        </div>
+
+        <div class="content">
+            <div class="title_container">
+                <h2>
+                    <%= image_tag "location.png", class: "icon" %>
+                    <%= @location.city%>
+                </h2>
+            </div>
+
+            <div class="days_container">
+                <p>"Days"</p>
+            </div>
+
+            <div class="hours_container">
+                <p>"Hours"</p>
+            </div>
+
+        </div>
+    </div>
+
+</body>

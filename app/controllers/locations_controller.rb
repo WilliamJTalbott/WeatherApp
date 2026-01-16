@@ -52,15 +52,25 @@ class LocationsController < ApplicationController
     location.longitude = output["longitude"].to_f
   end
 
-  def index
-    @weather_array = {}
+  # def index
+  #   @weather_array = {}
 
-    Location.all.each do |location|
-      update_location_data(location)
-      weather_json = get_weather_data(location)
-      @weather_array[location.id] = weather_json
+  #   # Location.all.each do |location|
+  #   #   update_location_data(location)
+  #   #   weather_json = get_weather_data(location)
+  #   #   @weather_array[location.id] = weather_json
+  #   # end
+
+  #   @addresses = Location.all
+  # end
+
+  def show
+    if params[:city]
+      @location = Location.find_by(city: params[:city])
+    else
+      @location = Location.first
     end
 
-    @addresses_data = Location.all
+    @locations = Location.all
   end
 end

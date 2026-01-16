@@ -1,10 +1,134 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+/* TODO remove px's */
+
+@font-face {
+    font-family: 'PixelFont';
+    src: url('PressStart2P-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    
+}
+
+.icon {
+    height: 1em;
+    width: 1em;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+h1 {
+    font-family: 'PixelFont', monospace;
+    -webkit-font-smoothing: none;
+    font-size: 48px;
+    font-weight: bold;
+}
+
+h2 {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+h3 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+p {
+    font-size: 16px;
+}
+
+body {
+
+    font-family: 'PixelFont', monospace;
+
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+
+    padding: 50px;
+
+    background-color: darkslategray;
+}
+
+.page {
+    display: flex;
+    justify-content: left;
+    gap: 35px;
+}
+
+.content {
+    display: flex;
+    justify-content: left;
+    flex-direction: column;
+    gap: 20px;
+
+}
+
+.locations_container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sidebar {
+    padding: 10px;
+    gap: 5px;
+    width: 250px; 
+    height: 1000px;
+    background-color: rgb(79, 161, 202);
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    
+}
+
+.title_container {
+    padding: 20px;
+    width: 500px;
+    height: 250px;
+    background-color: rgb(79, 161, 202);
+    display: flex;
+    
+}
+
+.days_container {
+    padding: 20px;
+    width: 500px;
+    height: 200px;
+    background-color: rgb(27, 23, 51);
+    display: flex;
+    
+}
+
+.hours_container {
+    padding: 10px;
+    width: 500px;
+    height: 800px;
+    background-color: rgb(93, 121, 122);
+    display: flex;
+    
+}
+
+.sidebar_item {
+
+    margin-left: -30px;
+    margin-right: -30px;
+
+    padding: 10px;
+
+    text-decoration: none;
+    color: white;
+    background-color: cadetblue;
+    cursor: pointer;
+}
+
+.sidebar_item:hover {
+    background-color: white;
+    color: cadetblue;
+    
+}
+
+.sidebar_item.active {
+    border: 5px solid;
+    border-color: rgb(255, 255, 255);
+}
