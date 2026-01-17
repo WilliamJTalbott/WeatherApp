@@ -1,4 +1,5 @@
 class LocationsController < ApplicationController
+  include ActionView::RecordIdentifier
   require "ipaddr"
   require "httparty"
   require "json"
@@ -16,6 +17,19 @@ class LocationsController < ApplicationController
     url = "https://api.open-meteo.com/v1/forecast?latitude=#{location.latitude}&longitude=#{location.longitude}&daily=temperature_2m_max,temperature_2m_min&timezone=auto&wind_speed_unit=mph&temperature_unit=fahrenheit&precipitation_unit=inch"
     response = HTTParty.get(url)
     JSON.parse(response.body)
+
+    weather_data = []
+
+    response["daily"]["time"].each_with_index do |date, index|
+      weather_data << {
+      date: date,
+      day_initial: Date.parse(date).strftime("%a")[0],
+      high_temp: response["daily"]["temperature_2m_max"][index],
+      low_temp: response["daily"]["temperature_2m_min"][index]
+    }
+    end
+
+  weather_data
   end
 
 
@@ -38,7 +52,9 @@ class LocationsController < ApplicationController
     response = HTTParty.get(url, query: params)
     output = JSON.parse(response.body)
 
-    location.city = output["city"].to_s
+    puts(output)
+
+    location.city = output["standard"]["city"].to_s
     location.latitude = output["latt"].to_f
     location.longitude = output["longt"].to_f
   end
@@ -71,6 +87,39 @@ class LocationsController < ApplicationController
       @location = Location.first
     end
 
+    @weather_data = get_weather_data(@location)
     @locations = Location.all
+  end
+
+  def create
+    @location = Location.new(location_params)
+    update_location_data(@location)
+    puts(@location.address)
+    puts(@location.city)
+    puts(@location.longitude)
+    puts(@location.latitude)
+
+    if @location.save
+    render turbo_stream: turbo_stream.prepend(
+      "locations_container",
+      partial: "sidebar_item",
+      locals: {
+        location: @location,
+        current_location: nil
+      }
+    )
+      # else
+      #   puts("NOT VALID LOCATION?")
+    end
+  end
+
+  def location_params
+    params.permit(:address)
+  end
+
+  def delete
+    @location = Location.find_by(city: params[:city])
+    @location.destroy
+    render turbo_stream: turbo_stream.remove(dom_id(@location))
   end
 end

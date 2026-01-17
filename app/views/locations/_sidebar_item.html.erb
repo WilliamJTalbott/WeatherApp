@@ -1,6 +1,14 @@
-<div class="sidebar_item <%= 'active' if location == current_location %>"
-     onclick="window.location.href='<%= location_path(location.city) %>'">
-    <h3><%= location.city %></h3>
-    <p><%= location.longitude %></p>
-    <p><%= location.latitude %></p>
+<div class="sidebar_item <%= 'active' if location == current_location %>",
+    id="<%= dom_id(location) %>">
+
+    <div onclick="window.location.href='<%= location_path(location.city) %>'">
+        <h3><%= location.city %></h3>
+    </div>
+
+    <%= button_to "Delete", 
+        delete_location_path(location.city), 
+        method: :delete,
+        class: "delete-btn" %>
+        
+
 </div>

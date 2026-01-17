@@ -1,39 +1,40 @@
 
 <body>
 
-    <div>
-        <h1>
-            <%= image_tag "sun.png", class: "icon" %>
-            Weather App
-        </h1>
+    <div class="header">
+        <h1><%= image_tag "sun.png", class: "icon" %>Weather App</h1>
     </div>
 
     <div class="page">
 
         <div class="sidebar">
             <p>Addresses</p>
-            <input type="text" placeholder="Enter IP/Street Address">
-            <button>Add Location</button>
 
-            <div class="locations_container">
+            <div class="locations_container", id="locations_container">
                 <%= render partial: "sidebar_item",
                 collection: @locations.reject { |location| location.city.blank? },
                 as: :location,
                 locals: { current_location: @location } %>
             </div>
 
+            <%= form_with url: create_location_path, method: :post do |form| %>
+                <%= form.text_field :address, placeholder: "Location address" %>
+                <%= form.submit "Add Location" %>
+            <% end %>
+
         </div>
 
         <div class="content">
             <div class="title_container">
                 <h2>
-                    <%= image_tag "location.png", class: "icon" %>
-                    <%= @location.city%>
+                    <%= image_tag "location.png", class: "icon" %><%= @location.city%>
                 </h2>
             </div>
 
-            <div class="days_container">
-                <p>"Days"</p>
+            <div class="days_container" id="days_container">
+                <%= render partial: "day",
+                collection: @weather_data,
+                as: :day %>
             </div>
 
             <div class="hours_container">
