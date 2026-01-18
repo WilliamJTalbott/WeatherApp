@@ -85,6 +85,13 @@ class LocationsController < ApplicationController
       @location = Location.find_by(city: params[:city])
     else
       @location = Location.first
+
+
+      if @location.nil?
+        user_ip = request.remote_ip
+        @location = Location.new(address: user_ip)
+        update_location_data(@location)
+      end
     end
 
     @weather_data = get_weather_data(@location)
