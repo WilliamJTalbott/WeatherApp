@@ -63,9 +63,22 @@ class LocationsController < ApplicationController
     response = HTTParty.get("https://ipapi.co/#{location.address}/json/")
     output = JSON.parse(response.body)
 
-    location.city = output["city"].to_s
-    location.latitude = output["latitude"].to_f
-    location.longitude = output["longitude"].to_f
+    begin
+
+      if output["error"]
+        Rails.logger.error("IP API Error")
+        return false
+      end
+
+      location.city = output["city"].to_s
+      location.latitude = output["latitude"].to_f
+      location.longitude = output["longitude"].to_f
+      true
+
+    rescue JSON::ParserError => e
+      Rails.logger.error("IP API did not return JSON")
+      false
+    end
   end
 
   # def index
@@ -90,7 +103,12 @@ class LocationsController < ApplicationController
       if @location.nil?
         user_ip = request.remote_ip
         @location = Location.new(address: user_ip)
-        update_location_data(@location)
+        unless update_location_data(@location)
+          @location.city = "New York"
+          @location.latitude = 40.7128
+          @location.longitude = -74.0060
+        end
+
       end
     end
 
