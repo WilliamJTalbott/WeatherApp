@@ -1,24 +1,12 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Created for the Craftsmanship Academy 2026 Take Home Assignment (RoleModel Software)
+First app I've made using Rails and Ruby
 
-Things you may want to cover:
+Add locations by inputting the IP address (recommended) or a postal address.
+The postal address API is quite buggy.
+Click a location on the side bar to select it, and hit it's delete button to remove it.
+Currently the selected location just prints out the high and low tempiture for a 7 day period.
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+(Need to add current day hour tracking to make it more useful as a weather app.)
+Should be able to find it currently hosted on https://weatherapp-83h1.onrender.com/ for an easy way to view it in action.
