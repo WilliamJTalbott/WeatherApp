@@ -61,9 +61,9 @@ class LocationsController < ApplicationController
 
   def set_ip_data(location)
     response = HTTParty.get("https://ipapi.co/#{location.address}/json/")
-    output = JSON.parse(response.body)
 
     begin
+      output = JSON.parse(response.body)
 
       if output["error"]
         Rails.logger.error("IP API Error")
