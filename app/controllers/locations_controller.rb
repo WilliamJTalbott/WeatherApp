@@ -150,7 +150,11 @@ class LocationsController < ApplicationController
 
   def delete
     @location = Location.find_by(city: params[:city])
-    @location.destroy
-    render turbo_stream: turbo_stream.remove(dom_id(@location))
+    if @location
+      @location.destroy
+      render turbo_stream: turbo_stream.remove(dom_id(@location))
+    else
+      head :no_content
+    end
   end
 end
