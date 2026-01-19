@@ -141,6 +141,7 @@ class LocationsController < ApplicationController
 
     rescue
       puts "Invalid Address"
+      head :unprocessable_entity
     end
   end
 
