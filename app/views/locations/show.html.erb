@@ -17,9 +17,9 @@
                 locals: { current_location: @location } %>
             </div>
 
-            <%= form_with url: create_location_path, method: :post do |form| %>
-                <%= form.text_field :address, placeholder: "Location address" %>
-                <%= form.submit "Add Location" %>
+            <%= form_with url: create_location_path, method: :post, class: "form" do |form| %>
+                <%= form.text_field :address, class: "location_input", placeholder: "Location address" %>
+                <%= form.submit "Add Location", class: "location_submit" %>
             <% end %>
 
         </div>
@@ -35,10 +35,6 @@
                 <%= render partial: "day",
                 collection: @weather_data,
                 as: :day %>
-            </div>
-
-            <div class="hours_container">
-                <p>"Hours? WIP.</p>
             </div>
 
         </div>

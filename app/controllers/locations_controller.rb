@@ -107,21 +107,10 @@ class LocationsController < ApplicationController
     end
 
     if @location.nil?
-      user_ip = request.remote_ip
-      @location = Location.new(address: user_ip)
-
-      if update_location_data(@location) and @location.save
-        puts(@location.address)
-        puts(@location.city)
-        puts(@location.latitude)
-        puts(@location.longitude)
-
-      else
-        puts("default")
-        @location.city = "New York"
-        @location.latitude = 40.7128
-        @location.longitude = -74.0060
-      end
+      @location = Location.new()
+      @location.city = "New York"
+      @location.latitude = 40.7128
+      @location.longitude = -74.0060
     end
 
     @weather_data = get_weather_data(@location)
