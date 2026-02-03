@@ -8,6 +8,10 @@
     
 }
 
+.error-container {
+    color: red;
+}
+
 button {
     border: none;
     outline: none;

@@ -120,13 +120,10 @@ class LocationsController < ApplicationController
   def create
     begin
       @location = Location.new(location_params)
-      update_location_data(@location)
-      # puts(@location.address)
-      # puts(@location.city)
-      # puts(@location.longitude)
-      # puts(@location.latitude)
 
-      if @location.save
+      result = update_location_data(@location)
+
+      if result and @location.save
       render turbo_stream: turbo_stream.prepend(
         "locations_container",
         partial: "sidebar_item",
@@ -135,13 +132,22 @@ class LocationsController < ApplicationController
           current_location: nil
         }
       )
-        # else
-        #   puts("NOT VALID LOCATION?")
+      else
+        @location.valid?
+        render turbo_stream: turbo_stream.update(
+          "error_messages",
+          partial: "error",
+          locals: { errors: [ "Address could not be found" ] }
+        )
       end
 
-    rescue
-      puts "Invalid Address"
-      head :unprocessable_entity
+    rescue => e
+      Rails.logger.error("Location creation failed: #{e.message}")
+      render turbo_stream: turbo_stream.update(
+        "error_messages",
+        partial: "error",
+        locals: { errors: [ "Something went wrong. Please try again." ] }
+      )
     end
   end
 
